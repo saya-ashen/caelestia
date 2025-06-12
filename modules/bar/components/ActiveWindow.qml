@@ -60,7 +60,8 @@ Item {
             id: icon
 
             animate: true
-            text: Icons.getAppCategoryIcon(Hyprland.activeClient?.wmClass, "desktop_windows")
+            // text: Icons.getAppCategoryIcon(Hyprland.activeClient?.wmClass, "Nix")
+            text: Icons.osIcons.nixos
             color: root.colour
 
             anchors.horizontalCenter: parent.horizontalCenter

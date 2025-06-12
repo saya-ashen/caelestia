@@ -4,7 +4,7 @@ import "root:/config"
 import Quickshell
 
 MaterialIcon {
-    text: "power_settings_new"
+    text: "🔋"
     color: Colours.palette.m3error
     font.bold: true
     font.pointSize: Appearance.font.size.normal

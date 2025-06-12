@@ -13,7 +13,7 @@ Column {
     MaterialIcon {
         id: icon
 
-        text: "calendar_month"
+        text: "📅"
         color: root.colour
 
         anchors.horizontalCenter: parent.horizontalCenter

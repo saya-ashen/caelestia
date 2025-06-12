@@ -24,7 +24,7 @@ Item {
         id: network
 
         animate: true
-        text: Network.active ? Icons.getNetworkIcon(Network.active.strength ?? 0) : "wifi_off"
+        text: Network.active ? Icons.getNetworkIcon(Network.active.strength ?? 0) : "█"
         color: root.colour
 
         anchors.horizontalCenter: parent.horizontalCenter
@@ -38,7 +38,7 @@ Item {
         anchors.topMargin: Appearance.spacing.small
 
         animate: true
-        text: Bluetooth.powered ? "bluetooth" : "bluetooth_disabled"
+        text: Bluetooth.powered ? "bluetooth" : "⎀"
         color: root.colour
     }
 
@@ -80,7 +80,7 @@ Item {
                     return "energy_savings_leaf";
                 if (PowerProfiles.profile === PowerProfile.Performance)
                     return "rocket_launch";
-                return "balance";
+                return "🔌";
             }
 
             const perc = UPower.displayDevice.percentage;

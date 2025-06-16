@@ -68,6 +68,39 @@ Singleton {
             }
         },
         Action {
+            name: qsTr("Shutdown")
+            desc: qsTr("Shutdown the system")
+            icon: "power_settings_new"
+            disabled: !Config.launcher.enableDangerousActions
+
+            function onClicked(list: AppList): void {
+                list.visibilities.launcher = false;
+                shutdown.running = true;
+            }
+        },
+        Action {
+            name: qsTr("Reboot")
+            desc: qsTr("Reboot the system")
+            icon: "cached"
+            disabled: !Config.launcher.enableDangerousActions
+
+            function onClicked(list: AppList): void {
+                list.visibilities.launcher = false;
+                reboot.running = true;
+            }
+        },
+        Action {
+            name: qsTr("Logout")
+            desc: qsTr("Log out of the current session")
+            icon: "exit_to_app"
+            disabled: !Config.launcher.enableDangerousActions
+
+            function onClicked(list: AppList): void {
+                list.visibilities.launcher = false;
+                logout.running = true;
+            }
+        },
+        Action {
             name: qsTr("Lock")
             desc: qsTr("Lock the current session")
             icon: "lock"
@@ -89,14 +122,14 @@ Singleton {
         }
     ]
 
-    readonly property list<var> preppedActions: list.map(a => ({
+    readonly property list<var> preppedActions: list.filter(a => !a.disabled).map(a => ({
                 name: Fuzzy.prepare(a.name),
                 desc: Fuzzy.prepare(a.desc),
                 action: a
             }))
 
     function fuzzyQuery(search: string): var {
-        return Fuzzy.go(search.slice(LauncherConfig.actionPrefix.length), preppedActions, {
+        return Fuzzy.go(search.slice(Config.launcher.actionPrefix.length), preppedActions, {
             all: true,
             keys: ["name", "desc"],
             scoreFn: r => r[0].score > 0 ? r[0].score * 0.9 + r[1].score * 0.1 : 0
@@ -104,7 +137,25 @@ Singleton {
     }
 
     function autocomplete(list: AppList, text: string): void {
-        list.search.text = `${LauncherConfig.actionPrefix}${text} `;
+        list.search.text = `${Config.launcher.actionPrefix}${text} `;
+    }
+
+    Process {
+        id: shutdown
+
+        command: ["systemctl", "poweroff"]
+    }
+
+    Process {
+        id: reboot
+
+        command: ["systemctl", "reboot"]
+    }
+
+    Process {
+        id: logout
+
+        command: ["sh", "-c", "(uwsm stop | grep -q 'Compositor is not running' && loginctl terminate-user $USER) || uwsm stop"]
     }
 
     Process {
@@ -123,6 +174,8 @@ Singleton {
         required property string name
         required property string desc
         required property string icon
+        property bool disabled
+        property string disabledReason
 
         function onClicked(list: AppList): void {
         }
